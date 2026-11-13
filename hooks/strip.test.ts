@@ -61,6 +61,15 @@ test('overflow folds into a count', () => {
   expect(overflow).toBe(2)
 })
 
+test('control characters never reach the terminal', () => {
+  const evil = slot('x', 'running')
+  evil.title = 'pwn\u001b]0;owned\u0007 title'
+  evil.activity = 'Bash echo \u001b[2J'
+  const rows = buildRows({ ...base, ident: { ...base.ident, branch: 'main\u001b[31m' }, slots: [evil], wide: true })
+  const text = rows.flat().map(([t]) => t).join('')
+  expect(/[\u0000-\u001f\u007f-\u009f]/.test(text)).toBe(false)
+})
+
 test('formatting', () => {
   expect(fmtTok(174_000)).toBe('174k')
   expect(fmtTok(1_000_000)).toBe('1M')

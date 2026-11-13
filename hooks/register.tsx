@@ -52,7 +52,9 @@ const FINISHED: readonly SlotStatus[] = ['completed', 'failed', 'killed']
 const padR = (s: string, w: number) => (s.length >= w ? s : s + ' '.repeat(w - s.length))
 const padL = (s: string, w: number) => (s.length >= w ? s : ' '.repeat(w - s.length) + s)
 const trunc = (s: string, w: number) => (s.length > w ? s.slice(0, Math.max(0, w - 1)) + '…' : s)
-const fit = (s: string, w: number) => padR(trunc(s, w), w)
+/** Strips control characters (escape sequences included) from text read off disk or tool input. */
+export const clean = (s: string) => s.replace(/[\u0000-\u001f\u007f-\u009f]/g, '')
+const fit = (s: string, w: number) => padR(trunc(clean(s), w), w)
 const oneLine = (s: string) => s.replace(/\s+/g, ' ').trim()
 
 export function fmtTok(n: number): string {
@@ -165,11 +167,11 @@ function identRow(v: View): Row {
   const cost = u?.costUsd ?? null
   const elapsed = u ? fmtDur(v.now - u.startedAt) : '—'
   const row: Row = [
-    [`◆ ${prettyModel(v.ident.model)}`, C.blue],
+    [`◆ ${clean(prettyModel(v.ident.model))}`, C.blue],
     [' · ', C.fg2],
-    [v.ident.folder || '—', C.fg0],
+    [clean(v.ident.folder) || '—', C.fg0],
     [' · ', C.fg2],
-    [`⎇ ${v.ident.branch || '—'}`, C.green],
+    [`⎇ ${clean(v.ident.branch) || '—'}`, C.green],
     [gap, C.fg1],
     [`$${padL(cost === null ? '—' : cost.toFixed(2), 6)}`, C.fg0],
     [' session', C.fg1],
