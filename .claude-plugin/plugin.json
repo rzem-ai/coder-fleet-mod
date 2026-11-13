@@ -1,0 +1,9 @@
+{
+  "name": "fleet-strip",
+  "version": "0.1.0",
+  "description": "A fixed six-row strip under the prompt: context, rate limits and spend on top, three subagent slots, and a coder-fleet board summary.",
+  "types": "./types/index.d.ts",
+  "author": { "name": "rzem-ai" },
+  "license": "MIT",
+  "repository": "https://github.com/rzem-ai/coder-fleet-mod"
+}

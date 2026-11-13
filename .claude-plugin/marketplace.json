@@ -1,0 +1,5 @@
+{
+  "name": "coder-fleet-mod",
+  "owner": { "name": "rzem-ai" },
+  "plugins": [{ "name": "fleet-strip", "source": "./" }]
+}
